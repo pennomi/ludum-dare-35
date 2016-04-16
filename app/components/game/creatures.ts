@@ -29,31 +29,78 @@ export class Creature {
     this.y = y;
   }
 
-  update() {
-    this.x += 1;
+  move(spaces) {
+    switch (this.getDirection()) {
+      case 0:
+        this.x -= spaces;
+      break;
+      case 1:
+        this.x -= spaces;
+        this.y -= spaces;
+      break;
+      case 2:
+        this.y -= spaces;
+      break;
+      case 3:
+        this.x += spaces;
+        this.y -= spaces;
+      break;
+      case 4:
+        this.x += spaces;
+      break;
+      case 5:
+        this.x += spaces;
+        this.y += spaces;
+      break;
+      case 6:
+        this.y += spaces;
+      break;
+      case 7:
+        this.x -= spaces;
+        this.y += spaces;
+      break;
+    }
   }
 
-  draw(ctx) {
-    // TODO: Calculate direction from target and position
-    let direction = 4;
+  update(mouse_x, mouse_y) {
+    this.move(.25);
+    this.target_x = mouse_x;
+    this.target_y = mouse_y;
+  }
+
+  private getDirection() {
+    let dx = this.x - this.target_x;
+    let dy = this.y - this.target_y;
+    if (Math.abs(dx) > 2 * Math.abs(dy)) {
+      return dx < 0 ? 4 : 0;
+    } else if (Math.abs(dy) > 2 * Math.abs(dx)) {
+      return dy < 0 ? 6 : 2;
+    } else if (dx > 0 && dy > 0) {
+      return 1;
+    } else if (dx < 0 && dy < 0) {
+      return 5;
+    } else if (dx > 0 && dy < 0) {
+      return 7;
+    } else if (dx < 0 && dy > 0) {
+      return 3;
+    }
+    return 0;
+  }
+
+  public draw(ctx) {
+    let direction = this.getDirection();
 
     let now = Date.now();
-    let animationState = this.animation.animations[this.currentState].duration;
-    let needsNewFrame = false;
-
-    if (now - this.lastFrameTime > animationState) {
-      needsNewFrame = true;
-    }
+    let animationDuration = this.animation.animations[this.currentState].duration;
+    let needsNewFrame = now - this.lastFrameTime > animationDuration;
 
     if (needsNewFrame) {
-      this.frame += 1;
-      this.frame %= 8;
+      let frameCount = this.animation.animations[this.currentState].frames.length / 8;
+      this.frame = (this.frame + 1) % frameCount;
       this.lastFrameTime = now;
     }
 
-
-    this.animation.draw(ctx, this.currentState, this.frame, direction, this.x, this.y);
-
+    this.animation.draw(ctx, this.currentState, this.frame, this.getDirection(), this.x, this.y);
   }
 }
 

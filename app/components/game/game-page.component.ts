@@ -1,10 +1,6 @@
 import {Component, AfterViewInit, ViewChild} from 'angular2/core';
-import {GoblinAnimation} from '../../animations/goblin';
-import {MinotaurAnimation} from '../../animations/minotaur';
-import {WyvernAnimation} from '../../animations/wyvern';
-import {ZombieAnimation} from '../../animations/zombie';
-import {AntlionAnimation} from '../../animations/antlion';
 import {Antlion, Goblin, Skeleton, Minotaur, Wyvern, Zombie} from './creatures';
+import {TerrainSprite} from '../../animations/terrain';
 
 @Component({
     selector: 'game-page',
@@ -15,10 +11,20 @@ export class GamePageComponent implements AfterViewInit {
   private ctx;
   private background;
   private creatures;
+  private terrain;
+
+  private mouse_x;
+  private mouse_y;
+
+  public center_x;
+  public center_y;
 
   ngAfterViewInit() {
     // Create the canvas
     this.ctx = this.gameCanvas.nativeElement.getContext("2d");
+
+    this.center_x = Math.floor(this.gameCanvas.nativeElement.width / 2);
+    this.center_y = Math.floor(this.gameCanvas.nativeElement.height / 2);
 
     // Make a game
     this.creatures = [
@@ -40,6 +46,7 @@ export class GamePageComponent implements AfterViewInit {
       new Skeleton(Math.random()*600, Math.random()*600),
       new Skeleton(Math.random()*600, Math.random()*600),
     ]
+    this.terrain = new TerrainSprite()
 
     // Kickstart the render loop
     this.render();
@@ -52,13 +59,27 @@ export class GamePageComponent implements AfterViewInit {
       this.render()
     });
 
-    // Clear the whole screen
-    this.ctx.clearRect(0, 0, 800, 600);
+    // Draw the background
+    this.terrain.draw(this.ctx);
 
     // Draw a goblin
     for (let c of this.creatures) {
-      c.update();
+      c.update(this.mouse_x, this.mouse_y);
       c.draw(this.ctx);
     }
-  };
+  }
+
+  onMouseMove(event) {
+    let offsetX, offsetY = 0;
+    let canvasX, canvasY = 0;
+    let element = this.gameCanvas.nativeElement;
+
+    offsetX = element.offsetLeft;
+    offsetY = element.offsetTop;
+
+    this.mouse_x = event.clientX - offsetX;
+    this.mouse_y = event.clientY - offsetY;
+
+    console.log(`x: ${ this.mouse_x } y: ${ this.mouse_y }`)
+  }
 }

@@ -59,44 +59,30 @@ export class Creature {
 
   update(mouse_x, mouse_y) {
     this.move(.25);
-
-    // angle as radians
-    // x1 + length * Math.cos(angle)
-    // y1 + length * Math.sin(angle)
-
     this.target_x = mouse_x;
     this.target_y = mouse_y;
   }
 
   private getDirection() {
-    return 7;
-  }
-
-  private degreesToRadians(degrees) {
-    return (degrees * Math.PI) / 180;
-  }
-
-  private segmentDivider(ctx, num, x1, y1, length, angle) {
-    angle = this.degreesToRadians(angle);
-    let to = {
-      x: x1 + length * Math.cos(angle),
-      y: y1 + length * Math.sin(angle)
+    let dx = this.x - this.target_x;
+    let dy = this.y - this.target_y;
+    if (Math.abs(dx) > 2 * Math.abs(dy)) {
+      return dx < 0 ? 4 : 0;
+    } else if (Math.abs(dy) > 2 * Math.abs(dx)) {
+      return dy < 0 ? 6 : 2;
+    } else if (dx > 0 && dy > 0) {
+      return 1;
+    } else if (dx < 0 && dy < 0) {
+      return 5;
+    } else if (dx > 0 && dy < 0) {
+      return 7;
+    } else if (dx < 0 && dy > 0) {
+      return 3;
     }
-    ctx.beginPath();
-    ctx.lineWidth = 1;
-    ctx.font = '14px Arial';
-    ctx.fillText(num, to.x, to.y);
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(to.x, to.y);
-    ctx.stroke();
+    return 0;
   }
 
-  draw(ctx) {
-    for (let seg = 0; seg < 8; seg++) {
-      this.segmentDivider(ctx, seg, this.x, this.y, 80, (seg * 45) - 180);
-    }
-
-    // TODO: Calculate direction from target and position
+  public draw(ctx) {
     let direction = this.getDirection();
 
     let now = Date.now();

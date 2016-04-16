@@ -14,6 +14,9 @@ export class GamePageComponent implements AfterViewInit {
   private creatures;
   private terrain;
 
+  private mouse_x;
+  private mouse_y;
+
   ngAfterViewInit() {
     // Create the canvas
     this.ctx = this.gameCanvas.nativeElement.getContext("2d");
@@ -44,8 +47,22 @@ export class GamePageComponent implements AfterViewInit {
 
     // Draw a goblin
     for (let c of this.creatures) {
-      c.update();
+      c.update(this.mouse_x, this.mouse_y);
       c.draw(this.ctx);
     }
   };
+
+  onMouseMove(event) {
+    let offsetX, offsetY = 0;
+    let canvasX, canvasY = 0;
+    let element = this.gameCanvas.nativeElement;
+
+    offsetX = element.offsetLeft;
+    offsetY = element.offsetTop;
+
+    this.mouse_x = event.clientX - offsetX;
+    this.mouse_y = event.clientY - offsetY;
+
+    console.log(`x: ${ this.mouse_x } y: ${ this.mouse_y }`)
+  }
 }

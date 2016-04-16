@@ -1,6 +1,7 @@
 import {Component, AfterViewInit, ViewChild} from 'angular2/core';
 import {Antlion, Goblin, Skeleton, Minotaur, Wyvern, Zombie} from './creatures';
 import {TerrainSprite} from '../../animations/terrain';
+import {Point} from '../../utils/point';
 
 @Component({
     selector: 'game-page',
@@ -12,44 +13,49 @@ export class GamePageComponent implements AfterViewInit {
   private background;
   private creatures;
   private terrain;
+  private hero;
 
-  private mouse_x;
-  private mouse_y;
+  // The position of the mouse on the canvas
+  private mouse : Point;
 
-  public center_x;
-  public center_y;
+  // Center of the HTML canvas
+  private center : Point;
 
   ngAfterViewInit() {
     // Create the canvas
     this.ctx = this.gameCanvas.nativeElement.getContext("2d");
 
-    this.center_x = Math.floor(this.gameCanvas.nativeElement.width / 2);
-    this.center_y = Math.floor(this.gameCanvas.nativeElement.height / 2);
+    // Set the center variables
+    this.center = new Point(
+      Math.floor(this.gameCanvas.nativeElement.width / 2),
+      Math.floor(this.gameCanvas.nativeElement.height / 2)
+    );
+
+    this.mouse = new Point(null, null);
 
     // Make a game
     this.creatures = [
-      new Goblin(Math.random()*600, Math.random()*600),
-      new Goblin(Math.random()*600, Math.random()*600),
-      new Goblin(Math.random()*600, Math.random()*600),
-      new Minotaur(Math.random()*600, Math.random()*600),
-      new Minotaur(Math.random()*600, Math.random()*600),
-      new Minotaur(Math.random()*600, Math.random()*600),
-      new Wyvern(Math.random()*600, Math.random()*600),
-      new Wyvern(Math.random()*600, Math.random()*600),
-      new Zombie(Math.random()*600, Math.random()*600),
-      new Zombie(Math.random()*600, Math.random()*600),
-      new Zombie(Math.random()*600, Math.random()*600),
-      new Antlion(Math.random()*600, Math.random()*600),
-      new Antlion(Math.random()*600, Math.random()*600),
-      new Antlion(Math.random()*600, Math.random()*600),
-      new Skeleton(Math.random()*600, Math.random()*600),
-      new Skeleton(Math.random()*600, Math.random()*600),
-      new Skeleton(Math.random()*600, Math.random()*600),
+      new Goblin(new Point(Math.random()*600, Math.random()*600)),
+      new Minotaur(new Point(Math.random()*600, Math.random()*600)),
+      new Wyvern(new Point(Math.random()*600, Math.random()*600)),
+      new Zombie(new Point(Math.random()*600, Math.random()*600)),
+      new Antlion(new Point(Math.random()*600, Math.random()*600)),
+      new Skeleton(new Point(Math.random()*600, Math.random()*600))
     ]
     this.terrain = new TerrainSprite()
 
+
     // Kickstart the render loop
     this.render();
+  }
+
+  renderAimLine() {
+    this.ctx.beginPath();
+    this.ctx.strokeStyle = 'rgba(255, 20, 20, 0.5)';
+    this.ctx.lineWidth = 3;
+    this.ctx.moveTo(this.center.x, this.center.y);
+    this.ctx.lineTo(this.mouse.x, this.mouse.y);
+    this.ctx.stroke();
   }
 
   // Draw the game
@@ -64,9 +70,11 @@ export class GamePageComponent implements AfterViewInit {
 
     // Draw a goblin
     for (let c of this.creatures) {
-      c.update(this.mouse_x, this.mouse_y);
+      c.update(this.center);
       c.draw(this.ctx);
     }
+
+    this.renderAimLine();
   }
 
   onMouseMove(event) {
@@ -77,9 +85,9 @@ export class GamePageComponent implements AfterViewInit {
     offsetX = element.offsetLeft;
     offsetY = element.offsetTop;
 
-    this.mouse_x = event.clientX - offsetX;
-    this.mouse_y = event.clientY - offsetY;
-
-    console.log(`x: ${ this.mouse_x } y: ${ this.mouse_y }`)
+    this.mouse = new Point(
+      event.clientX - offsetX,
+      event.clientY - offsetY
+    );
   }
 }

@@ -1,5 +1,10 @@
 import {BaseAnimationDef} from '../../animations/base';
 import {GoblinAnimation} from '../../animations/goblin';
+import {ZombieAnimation} from '../../animations/zombie';
+import {WyvernAnimation} from '../../animations/wyvern';
+import {AntlionAnimation} from '../../animations/antlion';
+import {SkeletonAnimation} from '../../animations/skeleton';
+import {MinotaurAnimation} from '../../animations/minotaur';
 
 // An instance of a creaturee
 export class Creature {
@@ -33,19 +38,45 @@ export class Creature {
     let direction = 4;
 
     let now = Date.now();
-    let animationDuration = this.animation.animations[this.currentState].duration;
-    let needsNewFrame = now - this.lastFrameTime > animationDuration;
+    let animationState = this.animation.animations[this.currentState].duration;
+    let needsNewFrame = false;
+
+    if (now - this.lastFrameTime > animationState) {
+      needsNewFrame = true;
+    }
 
     if (needsNewFrame) {
-      let frameCount = this.animation.animations[this.currentState].frames.length / 8;
-      this.frame = (this.frame + 1) % frameCount;
+      this.frame += 1;
+      this.frame %= 8;
       this.lastFrameTime = now;
     }
 
+
     this.animation.draw(ctx, this.currentState, this.frame, direction, this.x, this.y);
+
   }
 }
 
 export class Goblin extends Creature {
   animation = new GoblinAnimation();
+}
+
+export class Wyvern extends Creature {
+  animation = new WyvernAnimation();
+}
+
+export class Zombie extends Creature {
+  animation = new ZombieAnimation();
+}
+
+export class Skeleton extends Creature {
+  animation = new SkeletonAnimation();
+}
+
+export class Minotaur extends Creature {
+  animation = new MinotaurAnimation();
+}
+
+export class Antlion extends Creature {
+  animation = new AntlionAnimation();
 }

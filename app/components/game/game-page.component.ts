@@ -1,6 +1,10 @@
 import {Component, AfterViewInit, ViewChild} from 'angular2/core';
 import {GoblinAnimation} from '../../animations/goblin';
-import {Goblin} from './creatures';
+import {MinotaurAnimation} from '../../animations/minotaur';
+import {WyvernAnimation} from '../../animations/wyvern';
+import {ZombieAnimation} from '../../animations/zombie';
+import {AntlionAnimation} from '../../animations/antlion';
+import {Antlion, Goblin, Skeleton, Minotaur, Wyvern, Zombie} from './creatures';
 
 @Component({
     selector: 'game-page',
@@ -21,8 +25,20 @@ export class GamePageComponent implements AfterViewInit {
       new Goblin(Math.random()*600, Math.random()*600),
       new Goblin(Math.random()*600, Math.random()*600),
       new Goblin(Math.random()*600, Math.random()*600),
-      new Goblin(Math.random()*600, Math.random()*600),
-      new Goblin(Math.random()*600, Math.random()*600)
+      new Minotaur(Math.random()*600, Math.random()*600),
+      new Minotaur(Math.random()*600, Math.random()*600),
+      new Minotaur(Math.random()*600, Math.random()*600),
+      new Wyvern(Math.random()*600, Math.random()*600),
+      new Wyvern(Math.random()*600, Math.random()*600),
+      new Zombie(Math.random()*600, Math.random()*600),
+      new Zombie(Math.random()*600, Math.random()*600),
+      new Zombie(Math.random()*600, Math.random()*600),
+      new Antlion(Math.random()*600, Math.random()*600),
+      new Antlion(Math.random()*600, Math.random()*600),
+      new Antlion(Math.random()*600, Math.random()*600),
+      new Skeleton(Math.random()*600, Math.random()*600),
+      new Skeleton(Math.random()*600, Math.random()*600),
+      new Skeleton(Math.random()*600, Math.random()*600),
     ]
 
     // Kickstart the render loop

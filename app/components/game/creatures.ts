@@ -24,8 +24,10 @@ export class Creature {
     this.y = y;
   }
 
-  update() {
+  update(mouse_x, mouse_y) {
     this.x += 1;
+    this.target_x = mouse_x;
+    this.target_y = mouse_y;
   }
 
   draw(ctx) {

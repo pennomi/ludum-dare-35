@@ -5,8 +5,9 @@ import {WyvernAnimation} from '../../animations/wyvern';
 import {AntlionAnimation} from '../../animations/antlion';
 import {SkeletonAnimation} from '../../animations/skeleton';
 import {MinotaurAnimation} from '../../animations/minotaur';
+import {Point} from '../../utils/point';
 
-// An instance of a creaturee
+// An instance of a creature
 export class Creature {
   // Animation
   animation: BaseAnimationDef;
@@ -15,64 +16,61 @@ export class Creature {
   private currentState = "walk";
 
   // Position & Orientation
-  public x = 0;
-  public y = 0;
-  public target_x = 0;
-  public target_y = 0;
+  public pos : Point;
+  public target : Point;
 
   // Combat
   public hp = 0;
   public damage = 0;
   public speed = 0;
 
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
+  constructor(pos : Point) {
+    this.pos = pos;
+    this.target = new Point(null, null);
   }
 
-  move(spaces) {
+  move(spaces, direction) {
     let spaces_diagonal = spaces / 2 * 2 ** .5;
-    switch (this.getDirection()) {
+    switch (direction) {
       case 0:
-        this.x -= spaces;
+        this.pos.x -= spaces;
       break;
       case 1:
-        this.x -= spaces_diagonal;
-        this.y -= spaces_diagonal;
+        this.pos.x -= spaces_diagonal;
+        this.pos.y -= spaces_diagonal;
       break;
       case 2:
-        this.y -= spaces;
+        this.pos.y -= spaces;
       break;
       case 3:
-        this.x += spaces_diagonal;
-        this.y -= spaces_diagonal;
+        this.pos.x += spaces_diagonal;
+        this.pos.y -= spaces_diagonal;
       break;
       case 4:
-        this.x += spaces;
+        this.pos.x += spaces;
       break;
       case 5:
-        this.x += spaces_diagonal;
-        this.y += spaces_diagonal;
+        this.pos.x += spaces_diagonal;
+        this.pos.y += spaces_diagonal;
       break;
       case 6:
-        this.y += spaces;
+        this.pos.y += spaces;
       break;
       case 7:
-        this.x -= spaces_diagonal;
-        this.y += spaces_diagonal;
+        this.pos.x -= spaces_diagonal;
+        this.pos.y += spaces_diagonal;
       break;
     }
   }
 
-  update(dt, mouse_x, mouse_y) {
-    this.target_x = mouse_x;
-    this.target_y = mouse_y;
-    this.move(this.speed * dt);
+  update(dt, target : Point) {
+    this.move(this.speed * dt, this.getDirection());
+    this.target = target;
   }
 
   private getDirection() {
-    let dx = this.x - this.target_x;
-    let dy = this.y - this.target_y;
+    let dx = this.pos.x - this.target.x;
+    let dy = this.pos.y - this.target.y;
     if (Math.abs(dx) > 2 * Math.abs(dy)) {
       return dx < 0 ? 4 : 0;
     } else if (Math.abs(dy) > 2 * Math.abs(dx)) {
@@ -102,7 +100,7 @@ export class Creature {
       this.lastFrameTime = now;
     }
 
-    this.animation.draw(ctx, this.currentState, this.frame, this.getDirection(), this.x, this.y);
+    this.animation.draw(ctx, this.currentState, this.frame, this.getDirection(), this.pos.x, this.pos.y);
   }
 }
 

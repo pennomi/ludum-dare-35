@@ -1,13 +1,13 @@
 import {BaseAnimationDef} from '../../animations/base';
 import {GoblinAnimation} from '../../animations/goblin';
 
-// An instance of a creature
+// An instance of a creaturee
 export class Creature {
   // Animation
   animation: BaseAnimationDef;
-  private lastFrameTime = new Date();
+  private lastFrameTime = 0;
   private frame = 0;
-  private currentState = "idle";
+  private currentState = "walk";
 
   // Position & Orientation
   public x = 0;
@@ -26,14 +26,30 @@ export class Creature {
 
   update() {
     this.x += 1;
-    this.frame += 1;
-    this.frame %= 8;
   }
 
   draw(ctx) {
     // TODO: Calculate direction from target and position
     let direction = 4;
-    this.animation.draw(ctx, "walk", this.frame, direction, this.x, this.y);
+
+    let now = Date.now();
+    let animationState = this.animation.animations[this.currentState].duration;
+    let needsNewFrame = false;
+
+    /* animationState / 1000 */
+    if (now - this.lastFrameTime > animationState) {
+      needsNewFrame = true;
+    }
+
+    if (needsNewFrame) {
+      this.frame += 1;
+      this.frame %= 8;
+      this.lastFrameTime = now;
+    }
+
+
+    this.animation.draw(ctx, this.currentState, this.frame, direction, this.x, this.y);
+
   }
 }
 

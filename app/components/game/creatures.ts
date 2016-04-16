@@ -24,13 +24,80 @@ export class Creature {
     this.y = y;
   }
 
-  update() {
-    this.x += 1;
+  move(spaces) {
+    switch (this.getDirection()) {
+      case 0:
+        this.x -= spaces;
+      break;
+      case 1:
+        this.x -= spaces;
+        this.y -= spaces;
+      break;
+      case 2:
+        this.y -= spaces;
+      break;
+      case 3:
+        this.x += spaces;
+        this.y -= spaces;
+      break;
+      case 4:
+        this.x += spaces;
+      break;
+      case 5:
+        this.x += spaces;
+        this.y += spaces;
+      break;
+      case 6:
+        this.y += spaces;
+      break;
+      case 7:
+        this.x -= spaces;
+        this.y += spaces;
+      break;
+    }
+  }
+
+  update(mouse_x, mouse_y) {
+    this.move(.25);
+
+    // angle as radians
+    // x1 + length * Math.cos(angle)
+    // y1 + length * Math.sin(angle)
+
+    this.target_x = mouse_x;
+    this.target_y = mouse_y;
+  }
+
+  private getDirection() {
+    return 7;
+  }
+
+  private degreesToRadians(degrees) {
+    return (degrees * Math.PI) / 180;
+  }
+
+  private segmentDivider(ctx, num, x1, y1, length, angle) {
+    angle = this.degreesToRadians(angle);
+    let to = {
+      x: x1 + length * Math.cos(angle),
+      y: y1 + length * Math.sin(angle)
+    }
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.font = '14px Arial';
+    ctx.fillText(num, to.x, to.y);
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(to.x, to.y);
+    ctx.stroke();
   }
 
   draw(ctx) {
+    for (let seg = 0; seg < 8; seg++) {
+      this.segmentDivider(ctx, seg, this.x, this.y, 80, (seg * 45) - 180);
+    }
+
     // TODO: Calculate direction from target and position
-    let direction = 4;
+    let direction = this.getDirection();
 
     let now = Date.now();
     let animationDuration = this.animation.animations[this.currentState].duration;
@@ -42,7 +109,7 @@ export class Creature {
       this.lastFrameTime = now;
     }
 
-    this.animation.draw(ctx, this.currentState, this.frame, direction, this.x, this.y);
+    this.animation.draw(ctx, this.currentState, this.frame, this.getDirection(), this.x, this.y);
   }
 }
 

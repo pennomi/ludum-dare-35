@@ -1,6 +1,7 @@
 import {Component, AfterViewInit, ViewChild} from 'angular2/core';
 import {GoblinAnimation} from '../../animations/goblin';
 import {Goblin} from './creatures';
+import {TerrainSprite} from '../../animations/terrain';
 
 @Component({
     selector: 'game-page',
@@ -11,6 +12,7 @@ export class GamePageComponent implements AfterViewInit {
   private ctx;
   private background;
   private creatures;
+  private terrain;
 
   ngAfterViewInit() {
     // Create the canvas
@@ -24,6 +26,7 @@ export class GamePageComponent implements AfterViewInit {
       new Goblin(Math.random()*600, Math.random()*600),
       new Goblin(Math.random()*600, Math.random()*600)
     ]
+    this.terrain = new TerrainSprite()
 
     // Kickstart the render loop
     this.render();
@@ -36,8 +39,8 @@ export class GamePageComponent implements AfterViewInit {
       this.render()
     });
 
-    // Clear the whole screen
-    this.ctx.clearRect(0, 0, 800, 600);
+    // Draw the background
+    this.terrain.draw(this.ctx);
 
     // Draw a goblin
     for (let c of this.creatures) {

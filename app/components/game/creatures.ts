@@ -23,6 +23,7 @@ export class Creature {
   // Combat
   public hp = 0;
   public damage = 0;
+  public speed = 0;
 
   constructor(x, y) {
     this.x = x;
@@ -30,42 +31,43 @@ export class Creature {
   }
 
   move(spaces) {
+    let spaces_diagonal = spaces / 2 * 2 ** .5;
     switch (this.getDirection()) {
       case 0:
         this.x -= spaces;
       break;
       case 1:
-        this.x -= spaces;
-        this.y -= spaces;
+        this.x -= spaces_diagonal;
+        this.y -= spaces_diagonal;
       break;
       case 2:
         this.y -= spaces;
       break;
       case 3:
-        this.x += spaces;
-        this.y -= spaces;
+        this.x += spaces_diagonal;
+        this.y -= spaces_diagonal;
       break;
       case 4:
         this.x += spaces;
       break;
       case 5:
-        this.x += spaces;
-        this.y += spaces;
+        this.x += spaces_diagonal;
+        this.y += spaces_diagonal;
       break;
       case 6:
         this.y += spaces;
       break;
       case 7:
-        this.x -= spaces;
-        this.y += spaces;
+        this.x -= spaces_diagonal;
+        this.y += spaces_diagonal;
       break;
     }
   }
 
-  update(mouse_x, mouse_y) {
-    this.move(.25);
+  update(dt, mouse_x, mouse_y) {
     this.target_x = mouse_x;
     this.target_y = mouse_y;
+    this.move(this.speed * dt);
   }
 
   private getDirection() {
@@ -106,24 +108,30 @@ export class Creature {
 
 export class Goblin extends Creature {
   animation = new GoblinAnimation();
+  speed = 20;
 }
 
 export class Wyvern extends Creature {
   animation = new WyvernAnimation();
+  speed = 40;
 }
 
 export class Zombie extends Creature {
   animation = new ZombieAnimation();
+  speed = 15;
 }
 
 export class Skeleton extends Creature {
   animation = new SkeletonAnimation();
+  speed = 20;
 }
 
 export class Minotaur extends Creature {
   animation = new MinotaurAnimation();
+  speed = 80;
 }
 
 export class Antlion extends Creature {
   animation = new AntlionAnimation();
+  speed = 40;
 }

@@ -4,7 +4,7 @@ export class MinotaurAnimation extends BaseAnimationDef {
   getImageUrl() { return "assets/images/minotaur.png"; }
   animations = {
     walk: {
-      duration: 253,
+      duration: 100,
       frames: [
         [0,0,1021,714,54,78,25,74],
         [0,1,205,658,61,84,25,75],

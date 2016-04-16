@@ -19,6 +19,8 @@ export class GamePageComponent implements AfterViewInit {
   public center_x;
   public center_y;
 
+  public lastTickTime = Date.now();
+
   ngAfterViewInit() {
     // Create the canvas
     this.ctx = this.gameCanvas.nativeElement.getContext("2d");
@@ -28,23 +30,23 @@ export class GamePageComponent implements AfterViewInit {
 
     // Make a game
     this.creatures = [
-      new Goblin(Math.random()*600, Math.random()*600),
-      new Goblin(Math.random()*600, Math.random()*600),
-      new Goblin(Math.random()*600, Math.random()*600),
+      // new Goblin(Math.random()*600, Math.random()*600),
+      // new Goblin(Math.random()*600, Math.random()*600),
+      // new Goblin(Math.random()*600, Math.random()*600),
       new Minotaur(Math.random()*600, Math.random()*600),
-      new Minotaur(Math.random()*600, Math.random()*600),
-      new Minotaur(Math.random()*600, Math.random()*600),
-      new Wyvern(Math.random()*600, Math.random()*600),
-      new Wyvern(Math.random()*600, Math.random()*600),
-      new Zombie(Math.random()*600, Math.random()*600),
-      new Zombie(Math.random()*600, Math.random()*600),
-      new Zombie(Math.random()*600, Math.random()*600),
-      new Antlion(Math.random()*600, Math.random()*600),
-      new Antlion(Math.random()*600, Math.random()*600),
-      new Antlion(Math.random()*600, Math.random()*600),
-      new Skeleton(Math.random()*600, Math.random()*600),
-      new Skeleton(Math.random()*600, Math.random()*600),
-      new Skeleton(Math.random()*600, Math.random()*600),
+      // new Minotaur(Math.random()*600, Math.random()*600),
+      // new Minotaur(Math.random()*600, Math.random()*600),
+      // new Wyvern(Math.random()*600, Math.random()*600),
+      // new Wyvern(Math.random()*600, Math.random()*600),
+      // new Zombie(Math.random()*600, Math.random()*600),
+      // new Zombie(Math.random()*600, Math.random()*600),
+      // new Zombie(Math.random()*600, Math.random()*600),
+      // new Antlion(Math.random()*600, Math.random()*600),
+      // new Antlion(Math.random()*600, Math.random()*600),
+      // new Antlion(Math.random()*600, Math.random()*600),
+      // new Skeleton(Math.random()*600, Math.random()*600),
+      // new Skeleton(Math.random()*600, Math.random()*600),
+      // new Skeleton(Math.random()*600, Math.random()*600),
     ]
     this.terrain = new TerrainSprite()
 
@@ -62,9 +64,14 @@ export class GamePageComponent implements AfterViewInit {
     // Draw the background
     this.terrain.draw(this.ctx);
 
+    // Calculate the change in time since last frame
+    let now = Date.now();
+    let dt = (now - this.lastTickTime) / 1000;
+    this.lastTickTime = now;
+
     // Draw a goblin
     for (let c of this.creatures) {
-      c.update(this.mouse_x, this.mouse_y);
+      c.update(dt, this.mouse_x, this.mouse_y);
       c.draw(this.ctx);
     }
   }
@@ -79,7 +86,5 @@ export class GamePageComponent implements AfterViewInit {
 
     this.mouse_x = event.clientX - offsetX;
     this.mouse_y = event.clientY - offsetY;
-
-    console.log(`x: ${ this.mouse_x } y: ${ this.mouse_y }`)
   }
 }

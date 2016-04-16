@@ -18,11 +18,11 @@ export class GamePageComponent implements AfterViewInit {
 
     // Make a game
     this.creatures = [
-      new Goblin(100, 100),
-      new Goblin(100, 200),
-      new Goblin(100, 300),
-      new Goblin(100, 400),
-      new Goblin(100, 500)
+      new Goblin(Math.random()*600, Math.random()*600),
+      new Goblin(Math.random()*600, Math.random()*600),
+      new Goblin(Math.random()*600, Math.random()*600),
+      new Goblin(Math.random()*600, Math.random()*600),
+      new Goblin(Math.random()*600, Math.random()*600)
     ]
 
     // Kickstart the render loop

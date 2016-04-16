@@ -1,8 +1,5 @@
 .idea/
 build/
 node_modules/
-package.json
-styles.css
-tsconfig.json
 typings/
 

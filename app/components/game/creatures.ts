@@ -33,23 +33,16 @@ export class Creature {
     let direction = 4;
 
     let now = Date.now();
-    let animationState = this.animation.animations[this.currentState].duration;
-    let needsNewFrame = false;
-
-    /* animationState / 1000 */
-    if (now - this.lastFrameTime > animationState) {
-      needsNewFrame = true;
-    }
+    let animationDuration = this.animation.animations[this.currentState].duration;
+    let needsNewFrame = now - this.lastFrameTime > animationDuration;
 
     if (needsNewFrame) {
-      this.frame += 1;
-      this.frame %= 8;
+      let frameCount = this.animation.animations[this.currentState].frames.length / 8;
+      this.frame = (this.frame + 1) % frameCount;
       this.lastFrameTime = now;
     }
 
-
     this.animation.draw(ctx, this.currentState, this.frame, direction, this.x, this.y);
-
   }
 }
 

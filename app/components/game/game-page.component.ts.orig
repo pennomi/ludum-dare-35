@@ -1,6 +1,7 @@
 import {Component, AfterViewInit, ViewChild} from 'angular2/core';
-import {Hero, Antlion, Goblin, Skeleton, Minotaur, Wyvern, Zombie} from './creatures';
+import {Antlion, Goblin, Skeleton, Minotaur, Wyvern, Zombie} from './creatures';
 import {TerrainSprite} from '../../animations/terrain';
+import {Hero} from './hero';
 import {Point} from '../../utils/point';
 
 @Component({
@@ -11,9 +12,9 @@ export class GamePageComponent implements AfterViewInit {
   @ViewChild("gameView") gameCanvas;
   private ctx;
   private background;
-  private hero;
   private creatures;
   private terrain;
+  private hero;
 
   // The position of the mouse on the canvas
   private mouse : Point;
@@ -36,35 +37,38 @@ export class GamePageComponent implements AfterViewInit {
     this.mouse = new Point(null, null);
 
     // Make a game
-    this.hero = new Hero(this.center);
+<<<<<<< HEAD
+    // this.hero = new Hero(this.center);
     this.creatures = [
-<<<<<<< Updated upstream
-      new Goblin(new Point(Math.random()*600, Math.random()*600)),
-      // new Minotaur(new Point(Math.random()*600, Math.random()*600)),
-      // new Wyvern(new Point(Math.random()*600, Math.random()*600)),
-      // new Zombie(new Point(Math.random()*600, Math.random()*600)),
-      // new Antlion(new Point(Math.random()*600, Math.random()*600)),
-      // new Skeleton(new Point(Math.random()*600, Math.random()*600))
-=======
 
->>>>>>> Stashed changes
     ]
+=======
+    this.hero = new Hero(this.center);
+    this.creatures = [];
+>>>>>>> c5b8b86302ede6849cce8c5d0f4a0e577ce5935c
     this.terrain = new TerrainSprite();
 
 
     // Kickstart the render loop
     this.render();
-	  this.spawnWave(this.creatures);
+<<<<<<< HEAD
+	  this.spawnWave(this.creatures, 5000, 6);
+=======
+	  this.spawnWave(this.creatures, 4000);
+>>>>>>> c5b8b86302ede6849cce8c5d0f4a0e577ce5935c
   }
 
-   randomSingle() {
-    let random = Math.random() * 5;
+   randomSingle(max) {
+    if (max < 3) {
+      max = 3;
+    }
+    let random = Math.random() * max;
     return random.toString().slice(0)[0];
   }
 
   renderAimLine() {
     this.ctx.beginPath();
-    this.ctx.strokeStyle = 'rgba(255, 20, 20, 0.3)';
+    this.ctx.strokeStyle = 'rgba(255, 0, 0, 0.3)';
     this.ctx.lineWidth = 3;
     this.ctx.moveTo(this.center.x, this.center.y);
     this.ctx.lineTo(this.mouse.x, this.mouse.y);
@@ -86,35 +90,62 @@ export class GamePageComponent implements AfterViewInit {
     let dt = (now - this.lastTickTime) / 1000;
     this.lastTickTime = now;
 
+    // Draw hero
+    this.hero.update(dt, this.hero);
+    this.hero.draw(this.ctx);
+
     // Draw creatures
     for (let c of this.creatures) {
-      c.update(dt, this.center);
+      c.update(dt, this.hero);
       c.draw(this.ctx);
     }
 
     this.renderAimLine();
   }
 
-  spawnWave(list) {
+<<<<<<< HEAD
+  /*
+  4 => easy
+  5 => medium
+  6 => hard
+  This can be modified or entirely removed. I don't care. */
+  spawnWave(list, duration, diff) {
+=======
+  spawnWave(list, duration) {
+>>>>>>> c5b8b86302ede6849cce8c5d0f4a0e577ce5935c
     let mobs = [
-      Skeleton, Zombie, Antlion,
-      Wyvern, Minotaur, Goblin
+      Goblin, Zombie, Skeleton,
+      Antlion, Minotaur, Wyvern
     ];
+
+
 
     //Right
     setInterval(() => {
+<<<<<<< HEAD
+      list.push(new mobs[this.randomSingle(diff)](new Point(900, 150)));
+=======
       list.push(new mobs[this.randomSingle()](new Point(900, 150)));
-    }, 2500);
+>>>>>>> c5b8b86302ede6849cce8c5d0f4a0e577ce5935c
+    }, duration);
 
     //Left
     setInterval(() => {
+<<<<<<< HEAD
+      list.push(new mobs[this.randomSingle(diff)](new Point(1, 75)));
+=======
       list.push(new mobs[this.randomSingle()](new Point(1, 1)));
-    }, 2500);
+>>>>>>> c5b8b86302ede6849cce8c5d0f4a0e577ce5935c
+    }, duration);
 
     //Bottom
     setInterval(() => {
+<<<<<<< HEAD
+      list.push(new mobs[this.randomSingle(diff)](new Point(450, 600)));
+=======
       list.push(new mobs[this.randomSingle()](new Point(450, 600)));
-    }, 2500);
+>>>>>>> c5b8b86302ede6849cce8c5d0f4a0e577ce5935c
+    }, duration);
   }
 
 
@@ -130,5 +161,6 @@ export class GamePageComponent implements AfterViewInit {
       event.clientX - offsetX,
       event.clientY - offsetY
     );
+    // console.log(this.mouse);
   }
 }

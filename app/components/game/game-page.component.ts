@@ -58,7 +58,7 @@ export class GamePageComponent implements AfterViewInit {
 
   renderAimLine() {
     this.ctx.beginPath();
-    this.ctx.strokeStyle = 'rgba(255, 0, 0, 0.3)';
+    this.ctx.strokeStyle = 'rgba(255, 20, 20, 0.3)';
     this.ctx.lineWidth = 3;
     this.ctx.moveTo(this.center.x, this.center.y);
     this.ctx.lineTo(this.mouse.x, this.mouse.y);

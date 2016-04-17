@@ -4,14 +4,18 @@ import {Point} from '../../utils/point';
 
 export class Hero extends Creature {
   animation = new SkeletonAnimation();
-  getMaxHealth() { return 100 };
   currentState = 'walk';
+  getMaxHealth() { return 100 }
 
   update(dt, target: Creature) {
+    this.health -= .1;
     this.target = target;
   }
 
-  // draw(ctx) {
-  //
-  // }
+  public draw(ctx) {
+    this.drawAnimation(ctx);
+
+    let health_bar = new Point(125, 560);
+    this.drawHealthBar(ctx, 900 - 250, 15, health_bar);
+  }
 }

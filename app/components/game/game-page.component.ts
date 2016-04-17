@@ -52,7 +52,7 @@ export class GamePageComponent implements AfterViewInit {
     return random.toString().slice(0)[0];
   }
 
-  renderAimLine() {
+  drawAimLine() {
     this.ctx.beginPath();
     this.ctx.strokeStyle = 'rgba(255, 20, 20, 0.3)';
     this.ctx.lineWidth = 3;
@@ -76,17 +76,17 @@ export class GamePageComponent implements AfterViewInit {
     let dt = (now - this.lastTickTime) / 1000;
     this.lastTickTime = now;
 
-    // Draw hero
-    this.hero.update(dt, this.hero);
-    this.hero.draw(this.ctx);
-
     // Draw creatures
     for (let c of this.creatures) {
       c.update(dt, this.hero);
       c.draw(this.ctx);
     }
 
-    this.renderAimLine();
+    // Draw hero
+    this.hero.update(dt, this.hero);
+    this.hero.draw(this.ctx);
+
+    this.drawAimLine();
   }
 
   spawnWave(list, duration) {
@@ -94,8 +94,6 @@ export class GamePageComponent implements AfterViewInit {
       Skeleton, Zombie, Antlion,
       Wyvern, Minotaur, Goblin
     ];
-
-
 
     //Right
     setInterval(() => {

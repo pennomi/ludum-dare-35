@@ -29,36 +29,36 @@ export class Creature {
     this.target = new Point(null, null);
   }
 
-  move(spaces, direction) {
-    let spaces_diagonal = spaces / 2 * 2 ** .5;
+  move(px, direction) {
+    let px_diagonal = px / 2 * 2 ** .5;
     switch (direction) {
       case 0:
-        this.pos.x -= spaces;
-      break;
+        this.pos.left(px);
+        break;
       case 1:
-        this.pos.x -= spaces_diagonal;
-        this.pos.y -= spaces_diagonal;
+        this.pos.left(px_diagonal);
+        this.pos.up(px_diagonal);
       break;
       case 2:
-        this.pos.y -= spaces;
-      break;
+        this.pos.up(px);
+        break;
       case 3:
-        this.pos.x += spaces_diagonal;
-        this.pos.y -= spaces_diagonal;
+        this.pos.right(px_diagonal);
+        this.pos.up(px_diagonal);
       break;
       case 4:
-        this.pos.x += spaces;
-      break;
+        this.pos.right(px);
+        break;
       case 5:
-        this.pos.x += spaces_diagonal;
-        this.pos.y += spaces_diagonal;
+        this.pos.right(px_diagonal);
+        this.pos.down(px_diagonal);
       break;
       case 6:
-        this.pos.y += spaces;
-      break;
+        this.pos.down(px);
+        break;
       case 7:
-        this.pos.x -= spaces_diagonal;
-        this.pos.y += spaces_diagonal;
+        this.pos.left(px_diagonal);
+        this.pos.down(px_diagonal);
       break;
     }
   }

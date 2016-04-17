@@ -73,7 +73,7 @@ export class MinotaurAnimation extends BaseAnimationDef {
       ]
     },
     attack: {
-      duration: 400,
+      duration: 200,
       frames: [
         [0,0,500,1036,48,83,25,76],
         [0,1,451,171,53,83,24,75],
@@ -142,7 +142,7 @@ export class MinotaurAnimation extends BaseAnimationDef {
       ]
     },
     die: {
-      duration: 800,
+      duration: 80,
       frames: [
         [0,0,595,1115,48,83,25,76],
         [0,1,419,787,53,83,24,75],

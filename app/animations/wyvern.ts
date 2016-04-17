@@ -73,7 +73,7 @@ export class WyvernAnimation extends BaseAnimationDef {
       ]
     },
     attack: {
-      duration: 400,
+      duration: 180,
       frames: [
         [0,0,2237,1021,177,152,86,124],
         [0,1,1980,1703,165,158,93,139],
@@ -142,7 +142,7 @@ export class WyvernAnimation extends BaseAnimationDef {
       ]
     },
     die: {
-      duration: 800,
+      duration: 80,
       frames: [
         [0,0,1500,1228,147,161,49,116],
         [0,1,996,2033,173,137,69,102],

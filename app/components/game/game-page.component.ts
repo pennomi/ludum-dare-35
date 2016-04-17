@@ -37,24 +37,14 @@ export class GamePageComponent implements AfterViewInit {
     this.mouse = new Point(null, null);
 
     // Make a game
-    this.hero = new Hero(this.center);
-    this.creatures = [
-
-    ]
     this.terrain = new TerrainSprite();
-
+    this.hero = new Hero(this.center);
+    this.creatures = [this.hero];
 
     // Kickstart the render loop
     this.render();
 	  this.spawnWave(this.creatures, 5000, 6);
-  }
-
-   randomSingle(max) {
-    if (max < 3) {
-      max = 3;
-    }
-    let random = Math.random() * max;
-    return random.toString().slice(0)[0];
+    // this.creatures.push(new Minotaur(new Point(900, 150)));
   }
 
   drawAimLine() {
@@ -82,16 +72,23 @@ export class GamePageComponent implements AfterViewInit {
     this.lastTickTime = now;
 
     // Draw creatures
-    for (let c of this.creatures) {
-      c.update(dt, this.center);
+    let sortedCreatures = _.sortBy(this.creatures, c=>{
+      return c.pos.y;
+    });
+    for (let c of sortedCreatures) {
+      c.update(dt, this.creatures);
       c.draw(this.ctx);
     }
 
-    // Draw hero
-    this.hero.update(dt, this.hero);
-    this.hero.draw(this.ctx);
-
     this.drawAimLine();
+  }
+
+  randomSingle(max) {
+    if (max < 3) {
+      max = 3;
+    }
+    let random = Math.random() * max;
+    return random.toString().slice(0)[0];
   }
 
   /*
@@ -105,22 +102,15 @@ export class GamePageComponent implements AfterViewInit {
       Antlion, Minotaur, Wyvern
     ];
 
-    //Right
     setInterval(() => {
+      //Right
       list.push(new mobs[this.randomSingle(diff)](new Point(900, 150)));
-    }, duration);
-
-    //Left
-    setInterval(() => {
+      //Left
       list.push(new mobs[this.randomSingle(diff)](new Point(1, 75)));
-    }, duration);
-
-    //Bottom
-    setInterval(() => {
+      //Bottom
       list.push(new mobs[this.randomSingle(diff)](new Point(450, 600)));
     }, duration);
   }
-
 
   onMouseMove(event) {
     let offsetX, offsetY = 0;

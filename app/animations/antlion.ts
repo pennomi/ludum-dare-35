@@ -4,7 +4,7 @@ export class AntlionAnimation extends BaseAnimationDef {
   getImageUrl() { return "assets/images/antlion_small.png"; }
   animations = {
     walk: {
-      duration: 553,
+      duration: 80,
       frames: [
         [0,0,295,145,26,20,12,15],
         [0,1,338,59,26,21,15,14],
@@ -73,7 +73,7 @@ export class AntlionAnimation extends BaseAnimationDef {
       ]
     },
     attack: {
-      duration: 400,
+      duration: 80,
       frames: [
         [0,0,27,273,28,27,13,20],
         [0,1,108,0,35,27,19,20],
@@ -110,7 +110,7 @@ export class AntlionAnimation extends BaseAnimationDef {
       ]
     },
     die: {
-      duration: 800,
+      duration: 80,
       frames: [
         [0,0,95,396,27,25,10,19],
         [0,1,88,250,29,26,12,20],

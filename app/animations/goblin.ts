@@ -73,7 +73,7 @@ export class GoblinAnimation extends BaseAnimationDef {
       ]
     },
     attack: {
-      duration: 300,
+      duration: 150,
       frames: [
         [0,0,338,186,33,37,13,34],
         [0,1,271,329,33,40,14,38],

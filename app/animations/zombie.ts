@@ -4,7 +4,7 @@ export class ZombieAnimation extends BaseAnimationDef {
   getImageUrl() { return "assets/images/zombie.png"; }
   animations = {
     walk: {
-      duration: 80,
+      duration: 180,
       frames: [
         [0,0,773,92,43,54,25,48],
         [0,1,308,220,37,55,21,51],
@@ -73,7 +73,7 @@ export class ZombieAnimation extends BaseAnimationDef {
       ]
     },
     attack: {
-      duration: 400,
+      duration: 200,
       frames: [
         [0,0,221,93,37,66,16,61],
         [0,1,261,212,47,61,18,58],
@@ -110,7 +110,7 @@ export class ZombieAnimation extends BaseAnimationDef {
       ]
     },
     die: {
-      duration: 800,
+      duration: 80,
       frames: [
         [0,0,635,729,26,52,15,47],
         [0,1,485,683,33,51,18,50],

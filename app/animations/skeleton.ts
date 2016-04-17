@@ -4,7 +4,7 @@ export class SkeletonAnimation extends BaseAnimationDef {
   getImageUrl() { return "assets/images/skeleton.png"; }
   animations = {
     walk: {
-      duration: 553,
+      duration: 120,
       frames: [
         [0,0,475,662,53,60,34,56],
         [0,1,446,789,46,60,23,57],
@@ -73,7 +73,7 @@ export class SkeletonAnimation extends BaseAnimationDef {
       ]
     },
     attack: {
-      duration: 400,
+      duration: 200,
       frames: [
         [0,0,650,371,53,56,27,50],
         [0,1,492,787,36,62,22,54],
@@ -110,7 +110,7 @@ export class SkeletonAnimation extends BaseAnimationDef {
       ]
     },
     die: {
-      duration: 800,
+      duration: 175,
       frames: [
         [0,0,851,846,37,58,19,52],
         [0,1,889,59,68,61,23,53],

@@ -1,6 +1,7 @@
 import {Component, AfterViewInit, ViewChild} from 'angular2/core';
 import {Antlion, Goblin, Skeleton, Minotaur, Wyvern, Zombie} from './creatures';
 import {TerrainSprite} from '../../animations/terrain';
+import {Hero} from './hero';
 import {Point} from '../../utils/point';
 
 @Component({
@@ -37,15 +38,13 @@ export class GamePageComponent implements AfterViewInit {
 
     // Make a game
     this.hero = new Hero(this.center);
-    this.creatures = [
-
-    ]
+    this.creatures = [];
     this.terrain = new TerrainSprite();
 
 
     // Kickstart the render loop
     this.render();
-	  this.spawnWave(this.creatures);
+	  this.spawnWave(this.creatures, 4000);
   }
 
    randomSingle() {
@@ -77,35 +76,41 @@ export class GamePageComponent implements AfterViewInit {
     let dt = (now - this.lastTickTime) / 1000;
     this.lastTickTime = now;
 
+    // Draw hero
+    this.hero.update(dt, this.hero);
+    this.hero.draw(this.ctx);
+
     // Draw creatures
     for (let c of this.creatures) {
-      c.update(dt, this.center);
+      c.update(dt, this.hero);
       c.draw(this.ctx);
     }
 
     this.renderAimLine();
   }
 
-  spawnWave(list) {
+  spawnWave(list, duration) {
     let mobs = [
       Skeleton, Zombie, Antlion,
       Wyvern, Minotaur, Goblin
     ];
 
+
+
     //Right
     setInterval(() => {
       list.push(new mobs[this.randomSingle()](new Point(900, 150)));
-    }, 2500);
+    }, duration);
 
     //Left
     setInterval(() => {
       list.push(new mobs[this.randomSingle()](new Point(1, 1)));
-    }, 2500);
+    }, duration);
 
     //Bottom
     setInterval(() => {
       list.push(new mobs[this.randomSingle()](new Point(450, 600)));
-    }, 2500);
+    }, duration);
   }
 
 
@@ -121,5 +126,6 @@ export class GamePageComponent implements AfterViewInit {
       event.clientX - offsetX,
       event.clientY - offsetY
     );
+    // console.log(this.mouse);
   }
 }

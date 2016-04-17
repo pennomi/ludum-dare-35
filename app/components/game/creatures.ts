@@ -11,22 +11,51 @@ import {Point} from '../../utils/point';
 export class Creature {
   // Animation
   animation: BaseAnimationDef;
+  currentState = "walk";
   private lastFrameTime = 0;
   private frame = 0;
-  private currentState = "walk";
 
   // Position & Orientation
   public pos : Point;
-  public target : Point;
+  public target : Creature;
 
   // Combat
-  public hp = 0;
   public damage = 0;
   public speed = 0;
+  private health;
+  public getMaxHealth() { return 0; }
 
   constructor(pos : Point) {
     this.pos = pos;
-    this.target = new Point(null, null);
+    this.target = undefined;
+    this.health = this.getMaxHealth();
+  }
+
+  private healthPercent() {
+    let percent = this.health / this.getMaxHealth();
+    return percent;
+  }
+
+  private getDirection() {
+    let dx = this.pos.x - this.target.pos.x;
+    let dy = this.pos.y - this.target.pos.y;
+
+    if (Math.abs(dx) + Math.abs(dy) < 1) {
+      return -1;
+    } else if (Math.abs(dx) - Math.abs(dy) > 5) {
+      return dx < 0 ? 4 : 0;
+    } else if (Math.abs(dy) - Math.abs(dx) > 5) {
+      return dy < 0 ? 6 : 2;
+    } else if (dx > 0 && dy > 0) {
+      return 1;
+    } else if (dx < 0 && dy < 0) {
+      return 5;
+    } else if (dx > 0 && dy < 0) {
+      return 7;
+    } else if (dx < 0 && dy > 0) {
+      return 3;
+    }
+    return 0;
   }
 
   move(px, direction) {
@@ -63,31 +92,33 @@ export class Creature {
     }
   }
 
-  update(dt, target : Point) {
-    this.move(this.speed * dt, this.getDirection());
-    this.target = target;
+  getHit(damage) {
+    this.health -= damage;
   }
 
-  private getDirection() {
-    let dx = this.pos.x - this.target.x;
-    let dy = this.pos.y - this.target.y;
+  update(dt, target : Creature) {
+    this.target = target;
+    let dx = this.pos.x - this.target.pos.x;
+    let dy = this.pos.y - this.target.pos.y;
 
-    if (Math.abs(dx) + Math.abs(dy) < 1) {
-      return -1;
-    } else if (Math.abs(dx) - Math.abs(dy) > 5) {
-      return dx < 0 ? 4 : 0;
-    } else if (Math.abs(dy) - Math.abs(dx) > 5) {
-      return dy < 0 ? 6 : 2;
-    } else if (dx > 0 && dy > 0) {
-      return 1;
-    } else if (dx < 0 && dy < 0) {
-      return 5;
-    } else if (dx > 0 && dy < 0) {
-      return 7;
-    } else if (dx < 0 && dy > 0) {
-      return 3;
+    if (Math.abs(dx) < 35 && Math.abs(dy) < 35) {
+      this.currentState = 'attack';
+    } else {
+      this.currentState = 'walk';
+      this.move(this.speed * dt, this.getDirection());
     }
-    return 0;
+  }
+
+  public drawHealthBar(ctx) {
+    let health_bar = new Point(this.pos.x - 30, this.pos.y - 75);
+    let health_bar_length = 60 * this.healthPercent();
+
+    if (this.healthPercent() >= .5) {
+      ctx.fillStyle = 'rgba(20, 255, 20, 0.75)';
+    } else {
+      ctx.fillStyle = 'rgba(255, 20, 20, 0.75)';
+    }
+    ctx.fillRect(health_bar.x, health_bar.y, health_bar_length, 5);
   }
 
   public draw(ctx) {
@@ -103,35 +134,43 @@ export class Creature {
 
     let direction = this.getDirection();
     this.animation.draw(ctx, this.currentState, this.frame, direction == -1 ? 0 : direction, this.pos.x, this.pos.y);
+
+    this.drawHealthBar(ctx);
   }
 }
 
 export class Goblin extends Creature {
   animation = new GoblinAnimation();
+  getMaxHealth() { return 100 };
   speed = 20;
 }
 
 export class Wyvern extends Creature {
   animation = new WyvernAnimation();
+  getMaxHealth() { return 100 };
   speed = 40;
 }
 
 export class Zombie extends Creature {
   animation = new ZombieAnimation();
+  getMaxHealth() { return 100 };
   speed = 15;
 }
 
 export class Skeleton extends Creature {
   animation = new SkeletonAnimation();
-  speed = 20;
+  getMaxHealth() { return 100 };
+  speed = 40;
 }
 
 export class Minotaur extends Creature {
   animation = new MinotaurAnimation();
+  getMaxHealth() { return 100 };
   speed = 80;
 }
 
 export class Antlion extends Creature {
   animation = new AntlionAnimation();
+  getMaxHealth() { return 100 };
   speed = 40;
 }

@@ -1,5 +1,5 @@
 import {Component, AfterViewInit, ViewChild} from 'angular2/core';
-import {Hero, Antlion, Goblin, Skeleton, Minotaur, Wyvern, Zombie} from './creatures';
+import {Antlion, Goblin, Skeleton, Minotaur, Wyvern, Zombie} from './creatures';
 import {TerrainSprite} from '../../animations/terrain';
 import {Point} from '../../utils/point';
 
@@ -11,9 +11,9 @@ export class GamePageComponent implements AfterViewInit {
   @ViewChild("gameView") gameCanvas;
   private ctx;
   private background;
-  private hero;
   private creatures;
   private terrain;
+  private hero;
 
   // The position of the mouse on the canvas
   private mouse : Point;
@@ -38,18 +38,19 @@ export class GamePageComponent implements AfterViewInit {
     // Make a game
     this.hero = new Hero(this.center);
     this.creatures = [
-      new Goblin(new Point(Math.random()*600, Math.random()*600)),
-      // new Minotaur(new Point(Math.random()*600, Math.random()*600)),
-      // new Wyvern(new Point(Math.random()*600, Math.random()*600)),
-      // new Zombie(new Point(Math.random()*600, Math.random()*600)),
-      // new Antlion(new Point(Math.random()*600, Math.random()*600)),
-      // new Skeleton(new Point(Math.random()*600, Math.random()*600))
+
     ]
     this.terrain = new TerrainSprite();
 
 
     // Kickstart the render loop
     this.render();
+	  this.spawnWave(this.creatures);
+  }
+
+   randomSingle() {
+    let random = Math.random() * 5;
+    return random.toString().slice(0)[0];
   }
 
   renderAimLine() {
@@ -76,7 +77,7 @@ export class GamePageComponent implements AfterViewInit {
     let dt = (now - this.lastTickTime) / 1000;
     this.lastTickTime = now;
 
-    // Draw a goblin
+    // Draw creatures
     for (let c of this.creatures) {
       c.update(dt, this.center);
       c.draw(this.ctx);
@@ -84,6 +85,29 @@ export class GamePageComponent implements AfterViewInit {
 
     this.renderAimLine();
   }
+
+  spawnWave(list) {
+    let mobs = [
+      Skeleton, Zombie, Antlion,
+      Wyvern, Minotaur, Goblin
+    ];
+
+    //Right
+    setInterval(() => {
+      list.push(new mobs[this.randomSingle()](new Point(900, 150)));
+    }, 2500);
+
+    //Left
+    setInterval(() => {
+      list.push(new mobs[this.randomSingle()](new Point(1, 1)));
+    }, 2500);
+
+    //Bottom
+    setInterval(() => {
+      list.push(new mobs[this.randomSingle()](new Point(450, 600)));
+    }, 2500);
+  }
+
 
   onMouseMove(event) {
     let offsetX, offsetY = 0;

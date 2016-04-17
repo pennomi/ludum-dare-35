@@ -36,7 +36,7 @@ export class GamePageComponent implements AfterViewInit {
     this.mouse = new Point(null, null);
 
     // Make a game
-    this.hero = new Hero(this.center);
+    // this.hero = new Hero(this.center);
     this.creatures = [
 
     ]
@@ -45,17 +45,20 @@ export class GamePageComponent implements AfterViewInit {
 
     // Kickstart the render loop
     this.render();
-	  this.spawnWave(this.creatures);
+	  this.spawnWave(this.creatures, 5000, 6);
   }
 
-   randomSingle() {
-    let random = Math.random() * 5;
+   randomSingle(max) {
+    if (max < 3) {
+      max = 3;
+    }
+    let random = Math.random() * max;
     return random.toString().slice(0)[0];
   }
 
   renderAimLine() {
     this.ctx.beginPath();
-    this.ctx.strokeStyle = 'rgba(255, 20, 20, 0.3)';
+    this.ctx.strokeStyle = 'rgba(255, 0, 0, 0.3)';
     this.ctx.lineWidth = 3;
     this.ctx.moveTo(this.center.x, this.center.y);
     this.ctx.lineTo(this.mouse.x, this.mouse.y);
@@ -86,26 +89,31 @@ export class GamePageComponent implements AfterViewInit {
     this.renderAimLine();
   }
 
-  spawnWave(list) {
+  /*
+  4 => easy
+  5 => medium
+  6 => hard
+  This can be modified or entirely removed. I don't care. */
+  spawnWave(list, duration, diff) {
     let mobs = [
-      Skeleton, Zombie, Antlion,
-      Wyvern, Minotaur, Goblin
+      Goblin, Zombie, Skeleton,
+      Antlion, Minotaur, Wyvern
     ];
 
     //Right
     setInterval(() => {
-      list.push(new mobs[this.randomSingle()](new Point(900, 150)));
-    }, 2500);
+      list.push(new mobs[this.randomSingle(diff)](new Point(900, 150)));
+    }, duration);
 
     //Left
     setInterval(() => {
-      list.push(new mobs[this.randomSingle()](new Point(1, 1)));
-    }, 2500);
+      list.push(new mobs[this.randomSingle(diff)](new Point(1, 75)));
+    }, duration);
 
     //Bottom
     setInterval(() => {
-      list.push(new mobs[this.randomSingle()](new Point(450, 600)));
-    }, 2500);
+      list.push(new mobs[this.randomSingle(diff)](new Point(450, 600)));
+    }, duration);
   }
 
 

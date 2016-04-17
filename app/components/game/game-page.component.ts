@@ -2,6 +2,7 @@ import {Component, AfterViewInit, ViewChild} from 'angular2/core';
 import {Antlion, Goblin, Skeleton, Minotaur, Wyvern, Zombie} from './creatures';
 import {TerrainSprite} from '../../animations/terrain';
 import {Point} from '../../utils/point';
+import {Hero} from './hero';
 
 @Component({
     selector: 'game-page',
@@ -36,7 +37,7 @@ export class GamePageComponent implements AfterViewInit {
     this.mouse = new Point(null, null);
 
     // Make a game
-    // this.hero = new Hero(this.center);
+    this.hero = new Hero(this.center);
     this.creatures = [
 
     ]

@@ -71,9 +71,12 @@ export class Creature {
   private getDirection() {
     let dx = this.pos.x - this.target.x;
     let dy = this.pos.y - this.target.y;
-    if (Math.abs(dx) > 2 * Math.abs(dy)) {
+
+    if (Math.abs(dx) + Math.abs(dy) < 1) {
+      return -1;
+    } else if (Math.abs(dx) - Math.abs(dy) > 5) {
       return dx < 0 ? 4 : 0;
-    } else if (Math.abs(dy) > 2 * Math.abs(dx)) {
+    } else if (Math.abs(dy) - Math.abs(dx) > 5) {
       return dy < 0 ? 6 : 2;
     } else if (dx > 0 && dy > 0) {
       return 1;
@@ -88,8 +91,6 @@ export class Creature {
   }
 
   public draw(ctx) {
-    let direction = this.getDirection();
-
     let now = Date.now();
     let animationDuration = this.animation.animations[this.currentState].duration;
     let needsNewFrame = now - this.lastFrameTime > animationDuration;
@@ -100,7 +101,8 @@ export class Creature {
       this.lastFrameTime = now;
     }
 
-    this.animation.draw(ctx, this.currentState, this.frame, this.getDirection(), this.pos.x, this.pos.y);
+    let direction = this.getDirection();
+    this.animation.draw(ctx, this.currentState, this.frame, direction == -1 ? 0 : direction, this.pos.x, this.pos.y);
   }
 }
 
